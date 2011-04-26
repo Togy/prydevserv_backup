@@ -1,0 +1,1 @@
+UPDATE `creature_template` SET `name`='Deathbringer Saurfang',`subname`='',`IconName`='',`unit_flags`=0,`AIName`='',`ScriptName`='boss_saurfang' WHERE `entry`=37813;

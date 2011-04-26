@@ -187,6 +187,21 @@ template<class TObject> class UpdatableScript
         virtual void OnUpdate(TObject* /*obj*/, uint32 /*diff*/) { }
 };
 
+class UnitScript : public ScriptObject
+{
+    protected:
+
+        UnitScript(const char* name);
+		
+    public:
+
+		virtual uint32 DealDamage(Unit* AttackerUnit, Unit *pVictim,uint32 damage,DamageEffectType damagetype) { return damage;}
+		virtual void CalculateSpellDamageTaken(SpellNonMeleeDamage *damageInfo, int32 damage, SpellEntry const *spellInfo, WeaponAttackType attackType, bool crit) { }
+		virtual void CalculateMeleeDamage(Unit *pVictim, uint32 damage, CalcDamageInfo *damageInfo, WeaponAttackType attackType) { }
+
+};
+
+
 class SpellScriptLoader : public ScriptObject
 {
     protected:
@@ -268,6 +283,9 @@ class WorldScript : public ScriptObject, public UpdatableScript<void>
 
         // Called when the world is actually shut down.
         virtual void OnShutdown() { }
+
+		// Called at End of SetInitialWorldSettings.
+		virtual void SetInitialWorldSettings() { }
 };
 
 class FormulaScript : public ScriptObject
@@ -338,6 +356,22 @@ template<class TMap> class MapScript : public UpdatableScript<TMap>
 
         // Called on every map update tick.
         virtual void OnUpdate(TMap* /*map*/, uint32 /*diff*/) { }
+};
+
+class AllMapScript : public ScriptObject
+{
+    protected:
+
+        AllMapScript(const char* name);
+
+	public:
+
+    // Called when a player enters any Map.
+    virtual void OnPlayerEnterAll(Map* /*map*/, Player* /*player*/) { }	
+
+    // Called when a player leaves any map.
+    virtual void OnPlayerLeaveAll(Map* /*map*/, Player* /*player*/) { }
+
 };
 
 class WorldMapScript : public ScriptObject, public MapScript<Map>
@@ -432,6 +466,23 @@ class CreatureScript : public ScriptObject, public UpdatableScript<Creature>
 
         // Called when a CreatureAI object is needed for the creature.
         virtual CreatureAI* GetAI(Creature* /*creature*/) const { return NULL; }
+
+};
+
+class AllCreatureScript : public ScriptObject
+{
+    protected:
+
+        AllCreatureScript(const char* name);
+
+    public:
+
+        // Called from End of Creature Update.  
+        virtual void OnAllCreatureUpdate(Creature* /*creature*/, uint32 /*diff*/) {}
+
+        // Called from End of Creature Selectlevel.
+        virtual void Creature_SelectLevel(const CreatureInfo* /*cinfo*/, Creature* /*creature*/ ) {}
+
 };
 
 class GameObjectScript : public ScriptObject, public UpdatableScript<GameObject>
@@ -768,6 +819,12 @@ class ScriptMgr
     ~ScriptMgr();
 
     uint32 _scriptCount;
+	
+    public: /* UnitScriptLoader */
+ 
+		uint32 DealDamage(Unit* AttackerUnit, Unit *pVictim,uint32 damage,DamageEffectType damagetype);
+		void CalculateSpellDamageTaken(SpellNonMeleeDamage *damageInfo, int32 damage, SpellEntry const *spellInfo, WeaponAttackType attackType, bool crit);
+		void CalculateMeleeDamage(Unit *pVictim, uint32 damage, CalcDamageInfo *damageInfo, WeaponAttackType attackType);
 
     public: /* Initialization */
 
@@ -779,6 +836,10 @@ class ScriptMgr
 
         void IncrementScriptCount() { ++_scriptCount; }
         uint32 GetScriptCount() const { return _scriptCount; }
+
+	public: /* {VAS} Script Hooks */
+
+		float VAS_Script_Hooks();
 
     public: /* SpellScriptLoader */
 
@@ -806,6 +867,7 @@ class ScriptMgr
         void OnWorldUpdate(uint32 diff);
         void OnStartup();
         void OnShutdown();
+		void SetInitialWorldSettings();
 
     public: /* FormulaScript */
 
@@ -816,6 +878,11 @@ class ScriptMgr
         void OnBaseGainCalculation(uint32& gain, uint8 playerLevel, uint8 mobLevel, ContentLevels content);
         void OnGainCalculation(uint32& gain, Player* player, Unit* unit);
         void OnGroupRateCalculation(float& rate, uint32 count, bool isRaid);
+
+    public: /* AllScript */
+
+        void OnPlayerEnterMapAll(Map* map, Player* player);
+        void OnPlayerLeaveMapAll(Map* map, Player* player);	
 
     public: /* MapScript */
 
@@ -837,6 +904,10 @@ class ScriptMgr
         bool OnQuestAccept(Player* player, Item* item, Quest const* quest);
         bool OnItemUse(Player* player, Item* item, SpellCastTargets const& targets);
         bool OnItemExpire(Player* player, ItemPrototype const* proto);
+
+    public: /* AllCreatureScript */
+        void OnAllCreatureUpdate(Creature* creature, uint32 diff);
+        void Creature_SelectLevel(const CreatureInfo *cinfo, Creature* creature);
 
     public: /* CreatureScript */
 

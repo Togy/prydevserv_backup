@@ -1262,7 +1262,6 @@ void AddBattlegroundScripts()
 	void AddSC_pryds_guildmaster();
 	void AddSC_item_custom_stone();
 	void AddSC_item_custom_summon();
-	void AddSC_System_OnPVPKill();
 	void AddSC_ItemRequester();
 	void AddSC_pryds_buffer();
 	void AddSC_pryds_telenpc();
@@ -1270,6 +1269,7 @@ void AddBattlegroundScripts()
 	void AddSC_Npc_Beastmaster();
 	void AddSC_Reset();
 	void AddSC_npc_gurubashi_theme();
+    void AddSC_PVP_System();
 #endif
 
 void AddCustomScripts()
@@ -1279,7 +1279,6 @@ void AddCustomScripts()
 	AddSC_pryds_guildmaster();
 	AddSC_item_custom_stone();
 	AddSC_item_custom_summon();
-	AddSC_System_OnPVPKill();
 	AddSC_ItemRequester();
 	AddSC_pryds_buffer();
 	AddSC_pryds_telenpc();
@@ -1287,5 +1286,6 @@ void AddCustomScripts()
 	AddSC_Npc_Beastmaster();
 	AddSC_Reset();
 	AddSC_npc_gurubashi_theme();
+    AddSC_PVP_System();
 #endif
 }

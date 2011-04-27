@@ -2697,3 +2697,21 @@ pryds_allinone.EnableGivemeGold = 1
 pryds_allinoneBuffGoldCost = 20000
 pryds_allinoneSkillGoldCost = 20000
 pryds_allinoneSkillPoints = 5
+
+
+###############################################################################
+#
+# 		PVP System
+#
+#		0=Off,  1=On
+#
+##############################################################################
+PVP.System.Streaks = 2,5,10,20,30,40,50
+PVP.System.Last.Streak = 50
+PVP.System.LoseToken = 0
+PVP.System.AnyPlace = 0
+PVP.System.BattleGounds = 1
+PVP.System.SamePlayer = 0
+PVP_System_AddToken = 0
+PVP.System.Color = cffC400C4
+
